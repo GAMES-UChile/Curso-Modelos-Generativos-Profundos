@@ -2,15 +2,21 @@
 
 \input{preambuloBeamer}
 \usetheme{simple}
+\usepackage{tikz}
 
 \title{Clase 1: Introducción}
 \subtitle{MDS7203 Modelos Generativos Profundos}
 \date{7 de agosto de 2023}
-\author{Felipe Tobar}  
+\author{Felipe Tobar \\ Cristóbal Alcázar - Camilo Carvajal Reyes}  
 \titlegraphic{
+\begin{tikzpicture}[remember picture, overlay]
+    \node[opacity=1.0, at=(current page.center)] {\includegraphics[width=\paperwidth,height=\paperheight]{diapositivas/img/presentacion_plantilla_4_fondo_blanco-celeste.png}};
+\end{tikzpicture}
 \begin{figure}[htp] 
     \centering
-        \includegraphics[width=0.15\textwidth]{img/Uchile.pdf}% 
+        \includegraphics[width=0.15\textwidth]{img/Uchile.pdf}%
+        \hspace{1cm}
+        \includegraphics[width=0.15\textwidth]{diapositivas/img/IDIA.png}
 \end{figure}
 }
 \institute{Iniciativa de Datos e Inteligencia Artificial\\Universidad de Chile}
@@ -20,16 +26,56 @@
   \titlepage
 \end{frame}
 
+\begin{frame}
+    \frametitle{Tabla de contenidos}
+    \tableofcontents
+\end{frame}
+
+
 \section{Logística y presentación del curso}
+\begin{frame}
+    \frametitle{Tabla de contenidos}
+    \tableofcontents[currentsection]
+\end{frame}
+
+\subsection{Requisitos del curso}
+\begin{frame}{Requisitos del curso}
+    \begin{itemize}
+        \item Requisitos del curso: Aprendizaje de Máquinas (cualquier versión) o Simulación Estocástica. También es posible pedirlo por autorización.
+        \item Se requiere manejo básico en estadística / aprendizaje de máquinas
+        \item Necesitarán conocimiento en probabilidades y cálculo, más precisamente conocer:
+        \begin{itemize}
+            \item Optimización con descenso de gradiente (y como consecuencia derivadas)
+            % Gradients, gradient-descent optimization, backpropagation
+            \item \textit{Backpropagation}
+            \item Variables aleatorias, independencia e independencia condicional
+            % Random variables, independence, conditional independence
+            \item Teorema de Bayes, regla de la cadena y cambio de variables
+            % Bayes rule, chain rule, change of variables formulas
+        \end{itemize}
+        \item Es importante que se manejen bien en \textit{python}.
+    \end{itemize}
+\end{frame}
+
+
+\subsection{Organización del curso}
 \begin{frame}{Organización del curso}
 
 \begin{itemize}
   \item 2 clases por semana de 1.5 horas: lunes y viernes de 10:15 a 11:45 
-  \item ...
+  \item En general:
+  \begin{itemize}
+    \item Se espera que estudien el material de antemano
+    \item 2 módulos teóricos
+    \item 2 módulos de laboratorio (trabajo dirigido)
+  \end{itemize}
   \item Sala: por definir
   \item Evaluaciones: 
   \begin{itemize}
-    \item Evaluaciones a agregar
+    \item Quiz para evaluar conceptos básicos
+    \item Laboratorios individuales, evaluación por trabajo en clases y entrega final
+    \item Proyecto final
+    \item color{red}$NF = NQ*0.15 + NL*0.45 + NP*0.4 $\color{black}
   \end{itemize}
   \item Además de Ucursos, la página con el material del curso es: \href{https://github.com/GAMES-UChile/Curso-Modelos-Generativos-Profundos}{\tt https://github.com/GAMES-UChile/Curso-Modelos-Generativos-Profundos}
   \item Canal de consultas oficial es el foro de U-cursos
@@ -37,6 +83,130 @@
 
 \end{frame}
 
+
+\section{Introducción a Modelos Generativos}
+\begin{frame}
+    \frametitle{Tabla de contenidos}
+    \tableofcontents[currentsection]
+\end{frame}
+
+\subsection{Modelos Discriminativos}
+\begin{frame}{Modelos Discriminativos}
+    Para un modelo discriminativo el objetivo será tener una manera de decidir entre miembros de distintas clases.
+    \includegraphics[width=0.85\textwidth]{diapositivas/img/discriminativo.png}
+\end{frame}
+
+\subsection{Modelos Generativos}
+\begin{frame}{Modelo Generativo}
+    En el caso de un modelo generativo, nuestro objetivo es modelar la estructura de los datos.\\
+    \centering
+    \includegraphics[width=0.85\textwidth]{diapositivas/img/generativo.png}
+\end{frame}
+
+\begin{frame}{Modelo Generativo}
+    \only<1,4>{En el caso Gaussiano podíamos ajustar los parámetros que definen nuestra distribución de modo que se maximizara la log-verosimilitud.}
+    \only<2>{
+    \centering
+    \includegraphics[width=0.65\textwidth]{diapositivas/img/conditional_generative.jpeg}
+    }
+    \only<3>{
+    \centering
+    \includegraphics[width=0.95\textwidth]{diapositivas/img/generativo_condicional_zeta.png}
+    }
+    \only<4>{
+    \newparagraph Sin embargo en general las distribuciones Gaussianas no logran reflejar la complejidad intrínseca de los datos. Muchos de los modelos que estudiaremos en este curso intentarán solucionar esta y otras limitaciones, pero manteniendo la capacidad de samplear nuevos puntos de datos.
+    }
+\end{frame}
+
+
+\subsection{Ejemplos de Modelos Generativos}
+
+\begin{frame}{Ejemplos de Modelos Generativos}
+    \only<1>{
+    \textbf{\textbf{Modelos basados en energía}}\\
+    En este caso trataremos de modelar la densidad al considerar:
+    $$ p_\theta(x) = \frac{\tilde p_\theta(x)}{Z_\theta} = \frac{e^{-E_\theta(x)}}{Z_\theta} \,,$$
+    donde a $E_\theta:\mathbb{R}\to \mathbb{R}$ 
+    se le llama la función de energía. La analogía es: mientras menos energía tenga, más probable serán un punto de dato. Por otro lado, $Z_\theta$ es simplemente un denominador que normaliza, que en general se considera intratable. Este tipo de modelamiento es flexible pero samplear requiere escoger muestreos con baja energía usando métodos de MCMC, lo cual a veces lleva a una disminución en calidad.
+    }
+    \only<2>{\textbf{\textbf{Autoencoders variacionales} (VAE)}\\
+    Los VAEs modelan la distribución ajustando una red codificafora (\textit{encoder}) que mapea los datos de input a un espacio latente, y una red decodificadora (\textit{decoder}) que reconstruye el input usando muestreos del espacio latente. Esto captura la estructura subyacente y permite el sampleo desde la distribución aprendida dentro del espacio latente. \footnote{Fuente de la imagen: \url{https://lilianweng.github.io/posts/2018-08-12-vae/}}
+    \begin{figure}
+        \includegraphics[width=0.85\textwidth]{diapositivas/img/vae-gaussian-lilian-weng-diagram.png}
+    \end{figure}}
+    \only<3>{\textbf{\textbf{Flujos normalizantes}}\\
+    Un modelo de flujos normalizantes (\textit{normalizing flows}) modela la distribución de los datos aplicando una secuencia de transformaciones invertiles a una base de distribuciones simples, como Gaussianas. Esto permite al modelo aprender y generar muestras de distribuciones complejas al transformar los datos de forma iterativa y actuailizar la densidad de probabilidad usando cambio de variables. \footnote{Fuente de la imagen: \url{https://lilianweng.github.io/posts/2018-10-13-flow-models/}}
+    \begin{figure}
+        \includegraphics[width=0.85\textwidth]{img/normalizing-flow.png}
+    \end{figure}}
+    \only<4>{
+    \textbf{Redes generativas antagónicas} (GAN)\\
+    Las GANs son capaces de samplear nuevos puntos de datos al entrenar una red generadora que transforma ruido aleatorio en muestreos sintéticos, al mismo tiempo que ajusta una red discriminadora que distingue entre puntos reales y generados de manera sintética. Esto induce un bucle de retroalimentación (\textit{feedback loop}) que empuja el generador a crear puntos de datos cada vez más parecidos a los reales y más diversos. \footnote{Fuente de la imagen: \url{https://developers.google.com/machine-learning/gan/gan_structure}}
+    \begin{figure}
+        \includegraphics[width=0.8\textwidth]{img/gan.png}
+    \end{figure}
+    }
+\end{frame}
+
+\subsection{Taxonomía de Modelos Generativos}
+\begin{frame}{La Taxonomía de Modelos Generativos}
+    \centering
+    \includegraphics[width=0.9\textwidth]{diapositivas/img/taxonomy-generative-models.png}
+\end{frame}
+
+
+\section{Aplicaciones de Modelos Generativos}
+\begin{frame}
+    \frametitle{Tabla de contenidos}
+    \tableofcontents[currentsection]
+\end{frame}
+
+\subsection{Modelos generativos y problemas inversos}
+\begin{frame}{Modelos generativos y problemas inversos}
+    \centering
+    \includegraphics[width=0.9\textwidth]{diapositivas/img/inverse-problems.png}
+\end{frame}
+
+
+\subsection{Generación de imagen-a-imagen}
+\begin{frame}{Generación de imagen-a-imagen}
+    \centering
+    \includegraphics[width=0.9\textwidth]{diapositivas/img/img-to-img-dpi200.png}
+\end{frame}
+
+\subsection{Generación de imagen-a-imagen}
+\begin{frame}{Generación de secuencias}
+    \centering
+    \includegraphics[width=0.9\textwidth]{diapositivas/img/llm-task.png}
+\end{frame}
+
+
+\subsection{Aplicaciones en Industrias Creativas}
+\begin{frame}
+\frametitle{Aplicaciones de Modelos Generativos: Industrias Creativas}
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\textit{"No luz, no cámara, solo acción", \href{https://research.runwayml.com/gen2}{Runway, GEN-2}}
+  \begin{itemize}
+    \item \textit{Text-to-Video}
+    \item \textit{Text + Image-to-Video}
+    \item \textit{Image-to-Video}
+    \item \textit{Stylization}
+    \item \textit{Storyboard}
+    \item \textit{Mask}
+    \item \textit{Render}
+  \end{itemize}
+\end{column}
+\begin{column}{0.5\textwidth}
+  \includegraphics[width=\textwidth]{diapositivas/img/runaway-gen2-render.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+  \titlepage
+\end{frame}
 
 
 %Quitar de comentarios apenas se agregue alguna referencia 

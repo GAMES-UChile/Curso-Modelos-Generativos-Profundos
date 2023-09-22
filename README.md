@@ -10,6 +10,10 @@ Este repositorio contiene el material del curso MDS7203 Modelos Generativos Prof
 5. Tópicos complementarios (flujos normalizantes, GANs y variaciones)
 6. Modelos autoregresivos
 
+## Laboratorios
+- [Laboratorio 1 - Tópicos introductorios](labs/MDS7203_Lab1_Intro.pdf)
+- [Laboratorio 2 - Modelo de lenguaje autoregresivo](labs/Lab2_GPT.ipynb)
+
 ## Cuerpo Docente
 
 **Profesor**:
@@ -23,3 +27,6 @@ Iniciativa de Datos e Inteligencia Artificial Universidad de Chile
 **Auxiliares**:
 - Cristóbal Alcázar ([alkzar.cl/](https://alkzar.cl/))
 - Camilo Carvajal Reyes ([www.dim.uchile.cl/~ccarvajal/](http://www.dim.uchile.cl/~ccarvajal/))
+
+**Ayudante**:
+- Joaquín Barceló

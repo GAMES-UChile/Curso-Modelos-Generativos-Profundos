@@ -13,6 +13,7 @@ Este repositorio contiene el material del curso MDS7203 Modelos Generativos Prof
 ## Laboratorios
 - [Laboratorio 1 - Tópicos introductorios](labs/MDS7203_Lab1_Intro.pdf)
 - [Laboratorio 2 - Modelo de lenguaje autoregresivo](labs/Lab2_GPT.ipynb)
+- Laboratorio 3 - Auto-encoder variacionales: [Parte práctica](labs/Lab3_VAE_mds7203.ipynb) - [Parte teórica](labs/MDS7203_Lab3_VAE_teorica.pdf)
 
 ## Cuerpo Docente
 

@@ -14,6 +14,8 @@ Este repositorio contiene el material del curso MDS7203 Modelos Generativos Prof
 - [Laboratorio 1 - Tópicos introductorios](labs/MDS7203_Lab1_Intro.pdf)
 - [Laboratorio 2 - Modelo de lenguaje autoregresivo](labs/Lab2_GPT.ipynb)
 - Laboratorio 3 - Auto-encoder variacionales: [Parte práctica](labs/Lab3_VAE_mds7203.ipynb) - [Parte teórica](labs/MDS7203_Lab3_VAE_teorica.pdf)
+- [Laboratorio 4 - Modelos basados en Score](labs/MDS7203_Lab4_score.pdf)
+- [Laboratorio 5 - Modelos de difusión](labs/MDS7203_Lab5_Diffusion_Models.ipynb) 
 
 ## Cuerpo Docente
 
@@ -28,6 +30,4 @@ Iniciativa de Datos e Inteligencia Artificial Universidad de Chile
 **Auxiliares**:
 - Cristóbal Alcázar ([alkzar.cl/](https://alkzar.cl/))
 - Camilo Carvajal Reyes ([www.dim.uchile.cl/~ccarvajal/](http://www.dim.uchile.cl/~ccarvajal/))
-
-**Ayudante**:
 - Joaquín Barceló
